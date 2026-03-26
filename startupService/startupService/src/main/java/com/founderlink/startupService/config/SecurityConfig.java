@@ -1,4 +1,4 @@
-package com.founderlink.userService.config;
+package com.founderlink.startupService.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     private final HeaderAuthFilter headerAuthFilter;
 
     @Bean

@@ -19,7 +19,7 @@ import org.w3c.dom.stylesheets.LinkStyle;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping({"/api/users", "/api/users/"})
 @RequiredArgsConstructor
 public class UserController {
 

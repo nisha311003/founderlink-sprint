@@ -68,6 +68,8 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         String role   = jwtUtil.extractRole(token);
         Long userId   = jwtUtil.extractUserId(token);
 
+        System.out.println("🎫 JWT EXTRACTED - Email: " + email + ", Role: " + role + ", UserId: " + userId);
+
         //inject user info as headers for downstream services
         ServerWebExchange modifiedExchange = exchange.mutate()
                 .request(r -> r

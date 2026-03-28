@@ -16,13 +16,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthService implements IAuthService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final ModelMapper modelMapper;
 
+    @Override
     public String register(RegisterRequest request){
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
             throw new RuntimeException("Email already registered");
@@ -42,7 +43,7 @@ public class AuthService {
 
         return "User registered successfully";
     }
-
+    @Override
     public AuthResponse login(LoginRequest request){
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(()-> new UsernameNotFoundException("No account found with this email"));

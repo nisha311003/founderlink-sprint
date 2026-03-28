@@ -2,7 +2,7 @@
 **/application.yaml
 **/application.yml
 **/application.properties
-
+/local-env.ps1
 # IDE files
 .idea/
 *.iml

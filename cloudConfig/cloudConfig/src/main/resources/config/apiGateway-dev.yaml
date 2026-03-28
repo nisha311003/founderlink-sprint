@@ -1,0 +1,2 @@
+jwt:
+  secret: ${JWT_SECRET:f9529530ff617c8129212b02d4f20fc27cb16f54e556e5414fd5}

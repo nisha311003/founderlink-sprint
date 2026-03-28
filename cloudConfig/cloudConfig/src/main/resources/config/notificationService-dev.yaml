@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/notification_db?createDatabaseIfNotExist=true
+    username: root
+    password: ${NOTIFICATION_DB_PASSWORD:Gopal@2631#}
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: ${MAIL_USERNAME:69cbca7a1c39ff}
+    password: ${MAIL_PASSWORD:7fcd90f16c55d3}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

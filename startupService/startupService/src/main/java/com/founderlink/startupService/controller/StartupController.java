@@ -3,7 +3,7 @@ package com.founderlink.startupService.controller;
 
 import com.founderlink.startupService.dto.StartupRequest;
 import com.founderlink.startupService.dto.StartupResponse;
-import com.founderlink.startupService.service.StartupService;
+import com.founderlink.startupService.service.IStartupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @SecurityRequirement(name = "Bearer Authentication")
 public class StartupController {
 
-    private final StartupService startupService;
+    private final IStartupService startupService;
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_FOUNDER')")

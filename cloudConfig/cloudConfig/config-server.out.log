@@ -1,0 +1,70 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.founderlink:cloudConfig >---------------------
+[INFO] Building  0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.5.12:run (default-cli) > test-compile @ cloudConfig >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ cloudConfig ---
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] Copying 28 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ cloudConfig ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ cloudConfig ---
+[INFO] skip non existing resourceDirectory D:\IdeaProjects\FounderLink\cloudConfig\cloudConfig\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ cloudConfig ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] <<< spring-boot:3.5.12:run (default-cli) < test-compile @ cloudConfig <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.5.12:run (default-cli) @ cloudConfig ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.12)
+
+2026-03-27T11:53:25.950+05:30  INFO 13620 --- [cloudConfig] [           main] c.f.cloudConfig.CloudConfigApplication   : Starting CloudConfigApplication using Java 21.0.1 with PID 13620 (D:\IdeaProjects\FounderLink\cloudConfig\cloudConfig\target\classes started by Hp in D:\IdeaProjects\FounderLink\cloudConfig\cloudConfig)
+2026-03-27T11:53:25.953+05:30  INFO 13620 --- [cloudConfig] [           main] c.f.cloudConfig.CloudConfigApplication   : The following 1 profile is active: "native"
+2026-03-27T11:53:27.562+05:30  INFO 13620 --- [cloudConfig] [           main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=7d0c434b-49e6-3700-bb40-4d61726d4e68
+2026-03-27T11:53:28.042+05:30  INFO 13620 --- [cloudConfig] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8071 (http)
+2026-03-27T11:53:28.066+05:30  INFO 13620 --- [cloudConfig] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-27T11:53:28.066+05:30  INFO 13620 --- [cloudConfig] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-27T11:53:28.185+05:30  INFO 13620 --- [cloudConfig] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-03-27T11:53:28.187+05:30  INFO 13620 --- [cloudConfig] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2155 ms
+2026-03-27T11:53:29.612+05:30  INFO 13620 --- [cloudConfig] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 15 endpoints beneath base path '/actuator'
+2026-03-27T11:53:29.726+05:30  INFO 13620 --- [cloudConfig] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8071 (http) with context path '/'
+2026-03-27T11:53:29.753+05:30  INFO 13620 --- [cloudConfig] [           main] c.f.cloudConfig.CloudConfigApplication   : Started CloudConfigApplication in 4.724 seconds (process running for 5.58)
+2026-03-27T11:53:49.969+05:30  INFO 13620 --- [cloudConfig] [nio-8071-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-27T11:53:49.969+05:30  INFO 13620 --- [cloudConfig] [nio-8071-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-03-27T11:53:49.969+05:30  INFO 13620 --- [cloudConfig] [nio-8071-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-03-27T11:53:50.070+05:30  INFO 13620 --- [cloudConfig] [nio-8071-exec-1] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'class path resource [config/authService.yaml]' via location 'classpath:/config/'
+2026-03-27T11:53:50.070+05:30  INFO 13620 --- [cloudConfig] [nio-8071-exec-1] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'class path resource [config/application.yaml]' via location 'classpath:/config/'
+2026-03-27T11:53:50.269+05:30  INFO 13620 --- [cloudConfig] [nio-8071-exec-4] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'class path resource [config/authService-dev.yaml]' via location 'classpath:/config/'
+2026-03-27T11:53:50.270+05:30  INFO 13620 --- [cloudConfig] [nio-8071-exec-4] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'class path resource [config/application-dev.yaml]' via location 'classpath:/config/'
+2026-03-27T11:53:50.271+05:30  INFO 13620 --- [cloudConfig] [nio-8071-exec-4] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'class path resource [config/authService.yaml]' via location 'classpath:/config/'
+2026-03-27T11:53:50.272+05:30  INFO 13620 --- [cloudConfig] [nio-8071-exec-4] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: Config resource 'class path resource [config/application.yaml]' via location 'classpath:/config/'
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  09:54 min
+[INFO] Finished at: 2026-03-27T12:03:14+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.5.12:run (default-cli) on project cloudConfig: Process terminated with exit code: 1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

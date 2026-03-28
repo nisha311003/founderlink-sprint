@@ -13,11 +13,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements IUserService{
 
     private final UserProfileRepository userProfileRepository;
     private final ModelMapper modelMapper;
 
+    @Override
     public UserProfileResponse createProfile(Long userId, String email, String role, UserProfileRequest request){
         if(userProfileRepository.existsById(userId)){
             throw new RuntimeException("Profile already exists for this user");
@@ -35,12 +36,14 @@ public class UserService {
 
     }
 
+    @Override
     public UserProfileResponse getProfile(Long userId) throws UserNotFoundException {
         UserProfile profile = userProfileRepository.findById(userId)
                 .orElseThrow(()-> new UserNotFoundException("No profile found with id: "+userId));
         return modelMapper.map(profile, UserProfileResponse.class);
     }
 
+    @Override
     public UserProfileResponse updateProfile(Long userId, UserProfileRequest request) throws UserNotFoundException {
         UserProfile profile = userProfileRepository.findById(userId)
                 .orElseThrow(()-> new UserNotFoundException("User not found with id: "+userId));
@@ -55,6 +58,7 @@ public class UserService {
         return modelMapper.map(profile, UserProfileResponse.class);
 
     }
+    @Override
     public Page<UserProfileResponse> getAllProfiles(Pageable pageable){
         return userProfileRepository.findAll(pageable)
                 .map(profile ->

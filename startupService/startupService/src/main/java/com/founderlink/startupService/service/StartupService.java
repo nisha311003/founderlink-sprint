@@ -14,11 +14,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class StartupService {
+public class StartupService implements IStartupService{
 
     private final StartupRepository startupRepository;
     private final ModelMapper modelMapper;
 
+    @Override
     public StartupResponse createStartup(Long founderId, String founderEmail, StartupRequest request){
         StartupStage stage;
         try{
@@ -39,12 +40,14 @@ public class StartupService {
         return modelMapper.map(startup, StartupResponse.class);
     }
 
+    @Override
     public StartupResponse getStartup(Long id){
         Startup startup = startupRepository.findById(id)
                 .orElseThrow(()-> new StartupNotFoundException("Startup not found with id: "+id));
         return modelMapper.map(startup, StartupResponse.class);
     }
 
+    @Override
     public Page<StartupResponse> getAllStartups(String industry, String stage, Pageable pageable){
         Page<Startup> startups;
         if(industry != null && stage != null){
@@ -61,6 +64,7 @@ public class StartupService {
         }
         return startups.map(startup -> modelMapper.map(startup, StartupResponse.class));
     }
+    @Override
     public StartupResponse updateStartup(Long id, Long founderId, StartupRequest request){
         Startup startup = startupRepository.findById(id)
                 .orElseThrow(()-> new StartupNotFoundException(("Startup not found with id: "+id)));
@@ -80,6 +84,7 @@ public class StartupService {
 
     }
 
+    @Override
     public String deleteStartup(Long id, Long founderId){
         Startup startup = startupRepository.findById(id)
                 .orElseThrow(()-> new StartupNotFoundException(("Startup not found with id: "+id)));
@@ -92,6 +97,7 @@ public class StartupService {
         return "Startup deleted successfully";
     }
 
+    @Override
     public StartupResponse approveStartup(Long id){
         Startup startup = startupRepository.findById(id)
                 .orElseThrow(()-> new StartupNotFoundException(("Startup not found with id: "+id)));
@@ -102,11 +108,13 @@ public class StartupService {
 
     }
 
+    @Override
     public Page<StartupResponse> getStartupsByFounder(Long founderId, Pageable pageable){
         return startupRepository.findByFounderId(founderId, pageable)
                 .map(startup -> modelMapper.map(startup, StartupResponse.class));
     }
 
+    @Override
     public Page<StartupResponse> getAllApprovedStartups(
             String industry,
             String stage,
@@ -140,6 +148,7 @@ public class StartupService {
                 modelMapper.map(startup, StartupResponse.class));
     }
 
+    @Override
     public Page<StartupResponse> getPendingStartups(Pageable pageable) {
         return startupRepository.findByApprovedFalse(pageable)
                 .map(startup ->

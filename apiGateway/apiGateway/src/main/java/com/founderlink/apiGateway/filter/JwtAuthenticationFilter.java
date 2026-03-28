@@ -20,10 +20,6 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     private final JwtUtil jwtUtil;
 
-    private final List<String> publicPaths = List.of(
-            "/founderlink/auth/register",
-            "/founderlink/auth/login"
-    );
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         System.out.println("🔥 JWT FILTER EXECUTED");
@@ -104,8 +100,12 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         return -1;
     }
     private boolean isPublicPath(String path) {
-        return publicPaths.stream()
-                .anyMatch(path::startsWith);
+        return path.startsWith("/founderlink/auth/register") ||
+                path.startsWith("/founderlink/auth/login") ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs") ||
+                path.startsWith("/founderlink-docs/") ||
+                path.startsWith("/webjars/");
     }
 
 }

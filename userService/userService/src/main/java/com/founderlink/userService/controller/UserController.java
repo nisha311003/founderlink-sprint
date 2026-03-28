@@ -4,6 +4,7 @@ package com.founderlink.userService.controller;
 import com.founderlink.userService.dto.UserProfileRequest;
 import com.founderlink.userService.dto.UserProfileResponse;
 import com.founderlink.userService.exception.UserNotFoundException;
+import com.founderlink.userService.service.IUserService;
 import com.founderlink.userService.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @PostMapping("/create")
     public ResponseEntity<UserProfileResponse> createProfile(

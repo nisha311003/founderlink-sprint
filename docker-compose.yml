@@ -1,0 +1,279 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: founderlink-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-Gopal@2631#}"
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - founderlink-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-Gopal@2631#}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: founderlink-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER:-guest}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS:-guest}"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - founderlink-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  cloud-config:
+    image: nisha2431/founderlink/cloud-config:${FOUNDERLINK_TAG:-latest}
+    container_name: founderlink-cloud-config
+    restart: unless-stopped
+    ports:
+      - "8071:8071"
+    networks:
+      - founderlink-network
+    healthcheck:
+      test: ["CMD", "java", "-version"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  eureka-server:
+    image: nisha2431/founderlink/eureka-server:${FOUNDERLINK_TAG:-latest}
+    container_name: founderlink-eureka-server
+    restart: unless-stopped
+    depends_on:
+      cloud-config:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: "optional:configserver:http://cloud-config:8071/"
+      EUREKA_HOST: eureka-server
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+      EUREKA_CLIENT_REGISTERWITHEUREKA: "false"
+      EUREKA_CLIENT_FETCHREGISTRY: "false"
+    ports:
+      - "8761:8761"
+    networks:
+      - founderlink-network
+
+  auth-service:
+    image: nisha2431/founderlink/auth-service:${FOUNDERLINK_TAG:-latest}
+    container_name: founderlink-auth-service
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: "optional:configserver:http://cloud-config:8071/"
+      AUTH_DB_URL: jdbc:mysql://mysql:3306/auth_db?createDatabaseIfNotExist=true
+      AUTH_DB_USERNAME: "${MYSQL_APP_USERNAME:-root}"
+      AUTH_DB_PASSWORD: "${MYSQL_ROOT_PASSWORD:-Gopal@2631#}"
+      JWT_SECRET: "${JWT_SECRET:-f9529530ff617c8129212b02d4f20fc27cb16f54e556e5414fd5}"
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8081:8081"
+    networks:
+      - founderlink-network
+
+  user-service:
+    image: nisha2431/founderlink/user-service:${FOUNDERLINK_TAG:-latest}
+    container_name: founderlink-user-service
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: "optional:configserver:http://cloud-config:8071/"
+      USER_DB_URL: jdbc:mysql://mysql:3306/user_db?createDatabaseIfNotExist=true
+      USER_DB_USERNAME: "${MYSQL_APP_USERNAME:-root}"
+      USER_DB_PASSWORD: "${MYSQL_ROOT_PASSWORD:-Gopal@2631#}"
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8082:8082"
+    networks:
+      - founderlink-network
+
+  startup-service:
+    image: nisha2431/founderlink/startup-service:${FOUNDERLINK_TAG:-latest}
+    container_name: founderlink-startup-service
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: "optional:configserver:http://cloud-config:8071/"
+      STARTUP_DB_URL: jdbc:mysql://mysql:3306/startup_db?createDatabaseIfNotExist=true
+      STARTUP_DB_USERNAME: "${MYSQL_APP_USERNAME:-root}"
+      STARTUP_DB_PASSWORD: "${MYSQL_ROOT_PASSWORD:-Gopal@2631#}"
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8083:8083"
+    networks:
+      - founderlink-network
+
+  investment-service:
+    image: nisha2431/founderlink/investment-service:${FOUNDERLINK_TAG:-latest}
+    container_name: founderlink-investment-service
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: "optional:configserver:http://cloud-config:8071/"
+      INVESTMENT_DB_URL: jdbc:mysql://mysql:3306/investment_db?createDatabaseIfNotExist=true
+      INVESTMENT_DB_USERNAME: "${MYSQL_APP_USERNAME:-root}"
+      INVESTMENT_DB_PASSWORD: "${MYSQL_ROOT_PASSWORD:-Gopal@2631#}"
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8084:8084"
+    networks:
+      - founderlink-network
+
+  team-service:
+    image: nisha2431/founderlink/team-service:${FOUNDERLINK_TAG:-latest}
+    container_name: founderlink-team-service
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: "optional:configserver:http://cloud-config:8071/"
+      TEAM_DB_URL: jdbc:mysql://mysql:3306/team_db?createDatabaseIfNotExist=true
+      TEAM_DB_USERNAME: "${MYSQL_APP_USERNAME:-root}"
+      TEAM_DB_PASSWORD: "${MYSQL_ROOT_PASSWORD:-Gopal@2631#}"
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8085:8085"
+    networks:
+      - founderlink-network
+
+  messaging-service:
+    image: nisha2431/founderlink/messaging-service:${FOUNDERLINK_TAG:-latest}
+    container_name: founderlink-messaging-service
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: "optional:configserver:http://cloud-config:8071/"
+      MESSAGING_DB_URL: jdbc:mysql://mysql:3306/messaging_db?createDatabaseIfNotExist=true
+      MESSAGING_DB_USERNAME: "${MYSQL_APP_USERNAME:-root}"
+      MESSAGING_DB_PASSWORD: "${MYSQL_ROOT_PASSWORD:-Gopal@2631#}"
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: "5672"
+      RABBITMQ_USERNAME: "${RABBITMQ_DEFAULT_USER:-guest}"
+      RABBITMQ_PASSWORD: "${RABBITMQ_DEFAULT_PASS:-guest}"
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8086:8086"
+    networks:
+      - founderlink-network
+
+  notification-service:
+    image: nisha2431/founderlink/notification-service:${FOUNDERLINK_TAG:-latest}
+    container_name: founderlink-notification-service
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      cloud-config:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: "optional:configserver:http://cloud-config:8071/"
+      NOTIFICATION_DB_URL: jdbc:mysql://mysql:3306/notification_db?createDatabaseIfNotExist=true
+      NOTIFICATION_DB_USERNAME: "${MYSQL_APP_USERNAME:-root}"
+      NOTIFICATION_DB_PASSWORD: "${MYSQL_ROOT_PASSWORD:-Gopal@2631#}"
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: "5672"
+      RABBITMQ_USERNAME: "${RABBITMQ_DEFAULT_USER:-guest}"
+      RABBITMQ_PASSWORD: "${RABBITMQ_DEFAULT_PASS:-guest}"
+      MAIL_HOST: "${MAIL_HOST:-sandbox.smtp.mailtrap.io}"
+      MAIL_PORT: "${MAIL_PORT:-2525}"
+      MAIL_USERNAME: "${MAIL_USERNAME:-69cbca7a1c39ff}"
+      MAIL_PASSWORD: "${MAIL_PASSWORD:-7fcd90f16c55d3}"
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8087:8087"
+    networks:
+      - founderlink-network
+
+  api-gateway:
+    image: nisha2431/founderlink/api-gateway:${FOUNDERLINK_TAG:-latest}
+    container_name: founderlink-api-gateway
+    restart: unless-stopped
+    depends_on:
+      cloud-config:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: "optional:configserver:http://cloud-config:8071/"
+      JWT_SECRET: "${JWT_SECRET:-f9529530ff617c8129212b02d4f20fc27cb16f54e556e5414fd5}"
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8080:8080"
+    networks:
+      - founderlink-network
+
+networks:
+  founderlink-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  rabbitmq_data:

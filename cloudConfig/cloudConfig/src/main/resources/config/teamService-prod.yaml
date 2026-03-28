@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: ${TEAM_DB_URL}
+    username: ${TEAM_DB_USERNAME}
+    password: ${TEAM_DB_PASSWORD}

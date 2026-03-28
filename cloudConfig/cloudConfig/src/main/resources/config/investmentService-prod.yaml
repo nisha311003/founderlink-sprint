@@ -1,5 +1,0 @@
-spring:
-  datasource:
-    url: ${INVESTMENT_DB_URL}
-    username: ${INVESTMENT_DB_USERNAME}
-    password: ${INVESTMENT_DB_PASSWORD}

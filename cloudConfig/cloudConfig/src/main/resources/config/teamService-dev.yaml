@@ -1,5 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/team_db?createDatabaseIfNotExist=true
-    username: root
-    password: ${TEAM_DB_PASSWORD:Gopal@2631#}

@@ -2,7 +2,8 @@
 **/application.yaml
 **/application.yml
 **/application.properties
-/local-env.ps1
+local-env.ps1
+docker-compose.yml
 # IDE files
 .idea/
 *.iml
